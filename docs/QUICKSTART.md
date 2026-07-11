@@ -161,6 +161,29 @@ Commit the scaffold + first run update so `loop-audit` sees activity on the next
 | Unsure which pattern | [pattern-picker.md](./pattern-picker.md) · [loop-design-checklist.md](./loop-design-checklist.md) |
 | Something broke | [failure-modes.md](./failure-modes.md) · [stories/](../stories/) |
 
+### loop-sync: catch drift before L2
+
+Before a loop runs on stale instructions, check that `STATE.md` and `LOOP.md` still agree:
+
+```bash
+npx @cobusgreyling/loop-sync .
+```
+
+Example output:
+
+```text
+Loop Sync Report
+══════════════════════════════════════════════════
+Score: 85/100 (warning)
+
+⚠️ Minor inconsistencies detected.
+
+💡 Suggestions:
+   - Review STATE.md and LOOP.md for drift
+```
+
+Read the score as: 90–100 healthy, 70–89 warning, and 0–69 critical. Run `loop-sync` after editing `LOOP.md` and before scheduling L2 work so drift is fixed before the loop acts. Full command reference: [tools/loop-sync/README.md](../tools/loop-sync/README.md).
+
 ### L2: isolated fix attempts (`loop-worktree`)
 
 PR Babysitter and CI Sweeper need **one git worktree per fix attempt** so retries don't collide on the same branch. `loop-worktree` tracks them in a manifest and sweeps rejected attempts.
